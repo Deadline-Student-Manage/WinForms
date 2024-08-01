@@ -1,24 +1,70 @@
-﻿// Form1.cs
-using Microsoft.VisualBasic;
+﻿using Microsoft.VisualBasic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
+
 namespace SimpleEM
 {
     public partial class Form1 : Form
     {
         // List to store expenses
         private List<Expenses> expenses = new List<Expenses>();
+        public abstract class ExpenseBase
+        {
+            public string? Description { get; set; }
+            public decimal Amount { get; set; }
+            public DateTime Date { get; set; }
+
+            public abstract decimal GetCategoryBudget(string category);
+            public abstract void SetCategoryBudget(string category, decimal budget);
+        }
+
+        public class Expenses : ExpenseBase
+        {
+            private Dictionary<string, decimal> categoryBudgets = new Dictionary<string, decimal>();
+
+            public string Category { get; set; }
+
+            public override string ToString()
+            {
+                return $"{Description} ({Category}): {Amount} VNĐ - {Date.ToShortDateString()}";
+            }
+
+            public override decimal GetCategoryBudget(string category)
+            {
+                if (categoryBudgets.TryGetValue(category, out decimal budget))
+                {
+                    return budget;
+                }
+                return 0;
+            }
+
+            public override void SetCategoryBudget(string category, decimal budget)
+            {
+                if (categoryBudgets.ContainsKey(category))
+                {
+                    categoryBudgets[category] = budget;
+                }
+                else
+                {
+                    categoryBudgets.Add(category, budget);
+                }
+            }
+        }
 
         public Form1()
         {
             InitializeComponent();
-
         }
-        // Class to represent an expense
+
         private void UpdateTotal()
         {
             decimal total = 0;
@@ -28,41 +74,40 @@ namespace SimpleEM
             }
             lblTotal.Text = $"Tổng: {total} VNĐ";
         }
-        public class Expenses
-        {
-            public string? Description { get; set; }
-            public decimal Amount { get; set; }
-            public DateTime Date { get; set; }
-            public string Category { get; set; }  // Thêm trường danh mục
 
-            public override string ToString()
+        private void UpdateChart()
+        {
+            chartExpenses.Series.Clear();
+            var series = new Series("Expenses");
+            series.ChartType = SeriesChartType.Pie;
+
+            var categoryGroups = expenses.GroupBy(e => e.Category)
+                                         .Select(g => new { Category = g.Key, Amount = g.Sum(e => e.Amount) });
+
+            foreach (var group in categoryGroups)
             {
-                return $"{Description} ({Category}): {Amount} VNĐ - {Date.ToShortDateString()}";
+                series.Points.AddXY(group.Category, group.Amount);
             }
-        }
-        private void label1_Click(object sender, EventArgs e)
-        {
 
+            chartExpenses.Series.Add(series);
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private decimal GetCategoryBudget(string category)
         {
-            UpdateTotal();
+            // Assuming all expenses have the same budget for a category
+            var expense = expenses.FirstOrDefault(e => e.Category == category);
+            return expense?.GetCategoryBudget(category) ?? 0;
         }
 
-        private void label3_Click(object sender, EventArgs e)
+        private void SetCategoryBudget(string category, decimal budget)
         {
-
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void listExpenses_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
+            foreach (var expense in expenses)
+            {
+                if (expense.Category == category)
+                {
+                    expense.SetCategoryBudget(category, budget);
+                }
+            }
         }
 
         private void btnAddExpenses_Click(object sender, EventArgs e)
@@ -70,7 +115,7 @@ namespace SimpleEM
             // Add the expense to the list
             string description = txtDes.Text;
             decimal amount;
-            DateTime date = dtpExpenseDate.Value;  // Lấy ngày tháng từ dtpExpenseDate
+            DateTime date = dtpExpenseDate.Value;
             string category = cmbCategory.Text;
 
             if (decimal.TryParse(txtAmount.Text, out amount) && !string.IsNullOrWhiteSpace(description) && !string.IsNullOrWhiteSpace(category))
@@ -79,7 +124,7 @@ namespace SimpleEM
                 {
                     Description = description,
                     Amount = amount,
-                    Date = date,  // Lưu ngày tháng
+                    Date = date,
                     Category = category
                 };
 
@@ -92,6 +137,7 @@ namespace SimpleEM
 
                 // Update total
                 UpdateTotal();
+                UpdateChart();
 
                 // Add the new category to the ComboBox if it doesn't already exist
                 if (!cmbCategory.Items.Contains(category))
@@ -111,6 +157,26 @@ namespace SimpleEM
             }
         }
 
+        private void btnSetCategoryBudget_Click(object sender, EventArgs e)
+        {
+            string category = cmbCategory.Text;
+            decimal budget;
+            if (decimal.TryParse(txtBudget.Text, out budget) && !string.IsNullOrWhiteSpace(category))
+            {
+                SetCategoryBudget(category, budget);
+                MessageBox.Show($"Ngân sách cho danh mục '{category}' đã được đặt là {budget} VNĐ.", "Ngân sách cập nhật", MessageBoxButtons.OK);
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng nhập danh mục và ngân sách hợp lệ.", "Dữ liệu không hợp lệ", MessageBoxButtons.OK);
+            }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            UpdateTotal();
+            UpdateChart();
+        }
 
         private void btnFilterExpenses_Click(object sender, EventArgs e)
         {
@@ -125,7 +191,7 @@ namespace SimpleEM
 
             List<Expenses> filteredExpenses = new List<Expenses>();
 
-            DateTime selectedDate = dtpFilterDate.Value;  // Lấy ngày tháng từ dtpFilterDate
+            DateTime selectedDate = dtpFilterDate.Value;
             decimal totalFilteredAmount = 0;
 
             foreach (var expense in expenses)
@@ -169,8 +235,8 @@ namespace SimpleEM
             }
 
             lblTotal.Text = $"Tổng (lọc): {totalFilteredAmount} VNĐ";
+            UpdateChart();
         }
-
 
         private void btnAddCategory_Click(object sender, EventArgs e)
         {
@@ -185,8 +251,6 @@ namespace SimpleEM
                 MessageBox.Show("Vui lòng nhập danh mục hợp lệ.", "Dữ liệu không hợp lệ", MessageBoxButtons.OK);
             }
         }
-
-
 
         private void cmbTimePeriod_SelectedIndexChanged(object sender, EventArgs e)
         {
