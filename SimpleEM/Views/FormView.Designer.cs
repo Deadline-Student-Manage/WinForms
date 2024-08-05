@@ -1,6 +1,7 @@
-﻿namespace SimpleEM
+﻿// Views/FormView.Designer.cs
+namespace SimpleEM.Views
 {
-    partial class Form1
+    partial class FormView
     {
         /// <summary>
         ///  Required designer variable.
@@ -39,65 +40,72 @@
             lblTimePeriod = new Label();
             cmbTimePeriod = new ComboBox();
             dtpFilterDate = new DateTimePicker();
-            lblFilterDate = new Label();
             lblCategory = new Label();
             cmbCategory = new ComboBox();
             btnAddCategory = new Button();
             lblExpenseDate = new Label();
             dtpExpenseDate = new DateTimePicker();
-            chartExpenses = new System.Windows.Forms.DataVisualization.Charting.Chart();
             lblFilterCategory = new Label();
-            cmbFilterCategory = new ComboBox();
+            txtFilterCategory = new ComboBox();
             lblBudget = new Label();
             txtBudget = new TextBox();
             btnSetCategoryBudget = new Button();
             lblTypeFilter = new Label();
-            ((System.ComponentModel.ISupportInitialize)chartExpenses).BeginInit();
+            lblTitle = new Label();
+            listViewBudgets = new ListView();
+            columnHeaderCategory = new ColumnHeader();
+            columnHeaderBudget = new ColumnHeader();
+            btnDeleteExpense = new Button();
+            btnDeleteCategory = new Button();
+            btnDelCategoryBudget = new Button();
             SuspendLayout();
             // 
             // btnAddExpenses
             // 
-            btnAddExpenses.Location = new Point(26, 144);
+            btnAddExpenses.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnAddExpenses.Location = new Point(43, 258);
             btnAddExpenses.Margin = new Padding(2);
             btnAddExpenses.Name = "btnAddExpenses";
-            btnAddExpenses.Size = new Size(98, 23);
+            btnAddExpenses.Size = new Size(131, 29);
             btnAddExpenses.TabIndex = 0;
             btnAddExpenses.Text = "Thêm chi tiêu";
             btnAddExpenses.UseVisualStyleBackColor = true;
-            btnAddExpenses.Click += btnAddExpenses_Click;
+            btnAddExpenses.Click += BtnAddExpenses_Click;
             // 
             // btnFilterExpenses
             // 
-            btnFilterExpenses.Location = new Point(654, 11);
+            btnFilterExpenses.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnFilterExpenses.Location = new Point(723, 64);
             btnFilterExpenses.Margin = new Padding(2);
             btnFilterExpenses.Name = "btnFilterExpenses";
-            btnFilterExpenses.Size = new Size(122, 23);
+            btnFilterExpenses.Size = new Size(141, 34);
             btnFilterExpenses.TabIndex = 1;
             btnFilterExpenses.Text = "Lọc chi tiêu";
             btnFilterExpenses.UseVisualStyleBackColor = true;
-            btnFilterExpenses.Click += btnFilterExpenses_Click;
+            btnFilterExpenses.Click += BtnFilterExpenses_Click;
             // 
             // listExpenses
             // 
+            listExpenses.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             listExpenses.FormattingEnabled = true;
-            listExpenses.ItemHeight = 15;
-            listExpenses.Location = new Point(26, 189);
+            listExpenses.ItemHeight = 21;
+            listExpenses.Location = new Point(43, 293);
             listExpenses.Margin = new Padding(2);
             listExpenses.Name = "listExpenses";
-            listExpenses.Size = new Size(359, 199);
+            listExpenses.Size = new Size(524, 193);
             listExpenses.TabIndex = 2;
             // 
             // txtDes
             // 
-            txtDes.Location = new Point(123, 16);
+            txtDes.Location = new Point(163, 112);
             txtDes.Margin = new Padding(2);
             txtDes.Name = "txtDes";
-            txtDes.Size = new Size(98, 23);
+            txtDes.Size = new Size(283, 23);
             txtDes.TabIndex = 3;
             // 
             // txtAmount
             // 
-            txtAmount.Location = new Point(123, 49);
+            txtAmount.Location = new Point(163, 75);
             txtAmount.Margin = new Padding(2);
             txtAmount.Name = "txtAmount";
             txtAmount.Size = new Size(98, 23);
@@ -106,41 +114,44 @@
             // lblDes
             // 
             lblDes.AutoSize = true;
-            lblDes.Location = new Point(23, 19);
+            lblDes.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblDes.Location = new Point(26, 109);
             lblDes.Margin = new Padding(2, 0, 2, 0);
             lblDes.Name = "lblDes";
-            lblDes.Size = new Size(83, 15);
+            lblDes.Size = new Size(119, 21);
             lblDes.TabIndex = 5;
             lblDes.Text = "Mô tả chi tiêu:";
-            lblDes.Click += label1_Click_2;
             // 
             // lblAmount
             // 
             lblAmount.AutoSize = true;
-            lblAmount.Location = new Point(26, 52);
+            lblAmount.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblAmount.Location = new Point(81, 77);
             lblAmount.Margin = new Padding(2, 0, 2, 0);
             lblAmount.Name = "lblAmount";
-            lblAmount.Size = new Size(46, 15);
+            lblAmount.Size = new Size(67, 21);
             lblAmount.TabIndex = 6;
             lblAmount.Text = "Số tiền:";
             // 
             // lblTotal
             // 
             lblTotal.AutoSize = true;
-            lblTotal.Location = new Point(409, 112);
+            lblTotal.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTotal.Location = new Point(456, 206);
             lblTotal.Margin = new Padding(2, 0, 2, 0);
             lblTotal.Name = "lblTotal";
-            lblTotal.Size = new Size(37, 15);
+            lblTotal.Size = new Size(70, 30);
             lblTotal.TabIndex = 7;
             lblTotal.Text = "Tổng:";
             // 
             // lblTimePeriod
             // 
             lblTimePeriod.AutoSize = true;
-            lblTimePeriod.Location = new Point(406, 52);
+            lblTimePeriod.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTimePeriod.Location = new Point(456, 109);
             lblTimePeriod.Margin = new Padding(2, 0, 2, 0);
             lblTimePeriod.Name = "lblTimePeriod";
-            lblTimePeriod.Size = new Size(101, 15);
+            lblTimePeriod.Size = new Size(146, 21);
             lblTimePeriod.TabIndex = 8;
             lblTimePeriod.Text = "Khoảng thời gian:";
             // 
@@ -148,47 +159,36 @@
             // 
             cmbTimePeriod.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbTimePeriod.FormattingEnabled = true;
-            cmbTimePeriod.Items.AddRange(new object[] { "Ngày", "Tuần", "Tháng" });
-            cmbTimePeriod.Location = new Point(514, 144);
+            cmbTimePeriod.Items.AddRange(new object[] { "Ngày", "Tuần", "Tháng", "Năm", "Tất cả" });
+            cmbTimePeriod.Location = new Point(579, 143);
             cmbTimePeriod.Margin = new Padding(2);
             cmbTimePeriod.Name = "cmbTimePeriod";
             cmbTimePeriod.Size = new Size(118, 23);
             cmbTimePeriod.TabIndex = 9;
-            cmbTimePeriod.SelectedIndexChanged += cmbTimePeriod_SelectedIndexChanged;
             // 
             // dtpFilterDate
             // 
-            dtpFilterDate.Location = new Point(523, 44);
+            dtpFilterDate.Location = new Point(606, 109);
             dtpFilterDate.Margin = new Padding(2);
             dtpFilterDate.Name = "dtpFilterDate";
-            dtpFilterDate.Size = new Size(195, 23);
+            dtpFilterDate.Size = new Size(206, 23);
             dtpFilterDate.TabIndex = 10;
-            // 
-            // lblFilterDate
-            // 
-            lblFilterDate.AutoSize = true;
-            lblFilterDate.Location = new Point(409, 86);
-            lblFilterDate.Margin = new Padding(2, 0, 2, 0);
-            lblFilterDate.Name = "lblFilterDate";
-            lblFilterDate.Size = new Size(57, 15);
-            lblFilterDate.TabIndex = 11;
-            lblFilterDate.Text = "Ngày lọc:";
             // 
             // lblCategory
             // 
             lblCategory.AutoSize = true;
-            lblCategory.Location = new Point(26, 86);
+            lblCategory.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblCategory.Location = new Point(50, 175);
             lblCategory.Margin = new Padding(2, 0, 2, 0);
             lblCategory.Name = "lblCategory";
-            lblCategory.Size = new Size(65, 15);
+            lblCategory.Size = new Size(92, 21);
             lblCategory.TabIndex = 12;
             lblCategory.Text = "Danh mục:";
-            lblCategory.Click += label1_Click_1;
             // 
             // cmbCategory
             // 
             cmbCategory.FormattingEnabled = true;
-            cmbCategory.Location = new Point(123, 83);
+            cmbCategory.Location = new Point(163, 177);
             cmbCategory.Margin = new Padding(2);
             cmbCategory.Name = "cmbCategory";
             cmbCategory.Size = new Size(118, 23);
@@ -196,119 +196,180 @@
             // 
             // btnAddCategory
             // 
-            btnAddCategory.Location = new Point(259, 82);
+            btnAddCategory.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnAddCategory.Location = new Point(304, 177);
             btnAddCategory.Margin = new Padding(2);
             btnAddCategory.Name = "btnAddCategory";
-            btnAddCategory.Size = new Size(135, 23);
+            btnAddCategory.Size = new Size(146, 41);
             btnAddCategory.TabIndex = 14;
             btnAddCategory.Text = "Thêm danh mục";
             btnAddCategory.UseVisualStyleBackColor = true;
-            btnAddCategory.Click += btnAddCategory_Click;
+            btnAddCategory.Click += BtnAddCategory_Click;
             // 
             // lblExpenseDate
             // 
             lblExpenseDate.AutoSize = true;
-            lblExpenseDate.Location = new Point(26, 112);
+            lblExpenseDate.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblExpenseDate.Location = new Point(26, 141);
             lblExpenseDate.Margin = new Padding(2, 0, 2, 0);
             lblExpenseDate.Name = "lblExpenseDate";
-            lblExpenseDate.Size = new Size(80, 15);
+            lblExpenseDate.Size = new Size(116, 21);
             lblExpenseDate.TabIndex = 15;
             lblExpenseDate.Text = "Ngày chi tiêu:";
             // 
             // dtpExpenseDate
             // 
-            dtpExpenseDate.Location = new Point(123, 112);
+            dtpExpenseDate.Location = new Point(163, 149);
             dtpExpenseDate.Margin = new Padding(2);
             dtpExpenseDate.Name = "dtpExpenseDate";
-            dtpExpenseDate.Size = new Size(195, 23);
+            dtpExpenseDate.Size = new Size(209, 23);
             dtpExpenseDate.TabIndex = 16;
-            // 
-            // chartExpenses
-            // 
-            chartExpenses.Location = new Point(473, 205);
-            chartExpenses.Margin = new Padding(2);
-            chartExpenses.Name = "chartExpenses";
-            chartExpenses.Size = new Size(236, 183);
-            chartExpenses.TabIndex = 17;
-            chartExpenses.Text = "chartExpenses";
             // 
             // lblFilterCategory
             // 
             lblFilterCategory.AutoSize = true;
-            lblFilterCategory.Location = new Point(409, 16);
+            lblFilterCategory.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblFilterCategory.Location = new Point(456, 75);
             lblFilterCategory.Margin = new Padding(2, 0, 2, 0);
             lblFilterCategory.Name = "lblFilterCategory";
-            lblFilterCategory.Size = new Size(65, 15);
+            lblFilterCategory.Size = new Size(92, 21);
             lblFilterCategory.TabIndex = 12;
             lblFilterCategory.Text = "Danh mục:";
-            lblFilterCategory.Click += label1_Click_1;
             // 
-            // cmbFilterCategory
+            // txtFilterCategory
             // 
-            cmbFilterCategory.FormattingEnabled = true;
-            cmbFilterCategory.Location = new Point(514, 13);
-            cmbFilterCategory.Margin = new Padding(2);
-            cmbFilterCategory.Name = "cmbFilterCategory";
-            cmbFilterCategory.Size = new Size(118, 23);
-            cmbFilterCategory.TabIndex = 13;
+            txtFilterCategory.FormattingEnabled = true;
+            txtFilterCategory.Location = new Point(579, 75);
+            txtFilterCategory.Margin = new Padding(2);
+            txtFilterCategory.Name = "txtFilterCategory";
+            txtFilterCategory.Size = new Size(118, 23);
+            txtFilterCategory.TabIndex = 13;
             // 
             // lblBudget
             // 
             lblBudget.AutoSize = true;
-            lblBudget.Location = new Point(409, 86);
+            lblBudget.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblBudget.Location = new Point(454, 173);
             lblBudget.Margin = new Padding(2, 0, 2, 0);
             lblBudget.Name = "lblBudget";
-            lblBudget.Size = new Size(66, 15);
+            lblBudget.Size = new Size(94, 21);
             lblBudget.TabIndex = 12;
             lblBudget.Text = "Ngân sách:";
             // 
             // txtBudget
             // 
-            txtBudget.Location = new Point(514, 87);
+            txtBudget.Location = new Point(579, 175);
             txtBudget.Margin = new Padding(2);
             txtBudget.Name = "txtBudget";
-            txtBudget.Size = new Size(98, 23);
+            txtBudget.Size = new Size(118, 23);
             txtBudget.TabIndex = 4;
             // 
             // btnSetCategoryBudget
             // 
-            btnSetCategoryBudget.Location = new Point(654, 86);
+            btnSetCategoryBudget.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnSetCategoryBudget.Location = new Point(723, 136);
             btnSetCategoryBudget.Margin = new Padding(2);
             btnSetCategoryBudget.Name = "btnSetCategoryBudget";
-            btnSetCategoryBudget.Size = new Size(98, 23);
+            btnSetCategoryBudget.Size = new Size(141, 36);
             btnSetCategoryBudget.TabIndex = 0;
             btnSetCategoryBudget.Text = "Đặt ngân sách";
             btnSetCategoryBudget.UseVisualStyleBackColor = true;
-            btnSetCategoryBudget.Click += btnSetCategoryBudget_Click;
+            btnSetCategoryBudget.Click += BtnSetCategoryBudget_Click;
             // 
             // lblTypeFilter
             // 
             lblTypeFilter.AutoSize = true;
-            lblTypeFilter.Location = new Point(410, 152);
+            lblTypeFilter.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTypeFilter.Location = new Point(456, 141);
             lblTypeFilter.Margin = new Padding(2, 0, 2, 0);
             lblTypeFilter.Name = "lblTypeFilter";
-            lblTypeFilter.Size = new Size(56, 15);
+            lblTypeFilter.Size = new Size(79, 21);
             lblTypeFilter.TabIndex = 18;
             lblTypeFilter.Text = "Lọc theo:";
             // 
-            // Form1
+            // lblTitle
+            // 
+            lblTitle.AutoSize = true;
+            lblTitle.Font = new Font("Microsoft Sans Serif", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTitle.Location = new Point(293, 18);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new Size(320, 37);
+            lblTitle.TabIndex = 19;
+            lblTitle.Text = "QUẢN LÝ CHI TIÊU";
+            // 
+            // listViewBudgets
+            // 
+            listViewBudgets.Columns.AddRange(new ColumnHeader[] { columnHeaderCategory, columnHeaderBudget });
+            listViewBudgets.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            listViewBudgets.Location = new Point(572, 246);
+            listViewBudgets.Name = "listViewBudgets";
+            listViewBudgets.Size = new Size(292, 240);
+            listViewBudgets.TabIndex = 0;
+            listViewBudgets.UseCompatibleStateImageBehavior = false;
+            listViewBudgets.View = View.Details;
+            // 
+            // columnHeaderCategory
+            // 
+            columnHeaderCategory.Text = "Danh mục";
+            columnHeaderCategory.Width = 150;
+            // 
+            // columnHeaderBudget
+            // 
+            columnHeaderBudget.Text = "Ngân sách (VNĐ)";
+            columnHeaderBudget.Width = 150;
+            // 
+            // btnDeleteExpense
+            // 
+            btnDeleteExpense.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnDeleteExpense.Location = new Point(428, 258);
+            btnDeleteExpense.Name = "btnDeleteExpense";
+            btnDeleteExpense.Size = new Size(120, 30);
+            btnDeleteExpense.TabIndex = 1;
+            btnDeleteExpense.Text = "Xóa chi tiêu";
+            btnDeleteExpense.UseVisualStyleBackColor = true;
+            btnDeleteExpense.Click += BtnDeleteExpense_Click;
+            // 
+            // btnDeleteCategory
+            // 
+            btnDeleteCategory.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnDeleteCategory.Location = new Point(242, 258);
+            btnDeleteCategory.Name = "btnDeleteCategory";
+            btnDeleteCategory.Size = new Size(130, 30);
+            btnDeleteCategory.TabIndex = 2;
+            btnDeleteCategory.Text = "Xóa danh mục";
+            btnDeleteCategory.UseVisualStyleBackColor = true;
+            btnDeleteCategory.Click += BtnDeleteCategory_Click;
+            // 
+            // btnDelCategoryBudget
+            // 
+            btnDelCategoryBudget.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnDelCategoryBudget.Location = new Point(723, 176);
+            btnDelCategoryBudget.Margin = new Padding(2);
+            btnDelCategoryBudget.Name = "btnDelCategoryBudget";
+            btnDelCategoryBudget.Size = new Size(141, 36);
+            btnDelCategoryBudget.TabIndex = 20;
+            btnDelCategoryBudget.Text = "Xóa ngân sách";
+            btnDelCategoryBudget.UseVisualStyleBackColor = true;
+            btnDelCategoryBudget.Click += BtnDelCategoryBudget_Click;
+            // 
+            // FormView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1093, 611);
+            BackColor = SystemColors.ActiveCaption;
+            ClientSize = new Size(905, 508);
+            Controls.Add(lblTitle);
             Controls.Add(lblTypeFilter);
             Controls.Add(btnSetCategoryBudget);
             Controls.Add(txtBudget);
             Controls.Add(lblBudget);
-            Controls.Add(cmbFilterCategory);
+            Controls.Add(txtFilterCategory);
             Controls.Add(lblFilterCategory);
-            Controls.Add(chartExpenses);
             Controls.Add(dtpExpenseDate);
             Controls.Add(lblExpenseDate);
             Controls.Add(btnAddCategory);
             Controls.Add(cmbCategory);
             Controls.Add(lblCategory);
-            Controls.Add(lblFilterDate);
             Controls.Add(dtpFilterDate);
             Controls.Add(cmbTimePeriod);
             Controls.Add(lblTimePeriod);
@@ -320,11 +381,15 @@
             Controls.Add(listExpenses);
             Controls.Add(btnFilterExpenses);
             Controls.Add(btnAddExpenses);
+            Controls.Add(listViewBudgets);
+            Controls.Add(btnDeleteExpense);
+            Controls.Add(btnDeleteCategory);
+            Controls.Add(btnDelCategoryBudget);
             Margin = new Padding(2);
-            Name = "Form1";
+            Name = "FormView";
             Text = "Quản lý chi tiêu";
-            Load += Form1_Load;
-            ((System.ComponentModel.ISupportInitialize)chartExpenses).EndInit();
+            FormClosing += FormView_FormClosing;
+            Load += FormView_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -342,18 +407,23 @@
         private System.Windows.Forms.Label lblTimePeriod;
         private System.Windows.Forms.ComboBox cmbTimePeriod;
         private System.Windows.Forms.DateTimePicker dtpFilterDate;
-        private System.Windows.Forms.Label lblFilterDate;
         private System.Windows.Forms.Label lblCategory;
         private System.Windows.Forms.ComboBox cmbCategory;
         private System.Windows.Forms.Button btnAddCategory;
         private System.Windows.Forms.Label lblExpenseDate;
         private System.Windows.Forms.DateTimePicker dtpExpenseDate;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chartExpenses;
         private System.Windows.Forms.Label lblFilterCategory;
-        private System.Windows.Forms.ComboBox cmbFilterCategory;
+        private System.Windows.Forms.ComboBox txtFilterCategory;
         private System.Windows.Forms.Label lblBudget;
         private System.Windows.Forms.TextBox txtBudget;
         private System.Windows.Forms.Button btnSetCategoryBudget;
+        private System.Windows.Forms.ListView listViewBudgets;
+        private System.Windows.Forms.ColumnHeader columnHeaderCategory;
+        private System.Windows.Forms.ColumnHeader columnHeaderBudget;
+        private System.Windows.Forms.Button btnDeleteExpense;
+        private System.Windows.Forms.Button btnDeleteCategory;
         private Label lblTypeFilter;
+        private Label lblTitle;
+        private Button btnDelCategoryBudget;
     }
 }
