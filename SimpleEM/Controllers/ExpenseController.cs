@@ -1,5 +1,4 @@
-﻿// Controllers/ExpenseController.cs
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using SimpleEM.Models;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +9,7 @@ namespace SimpleEM.Controllers
     public class ExpenseController
     {
         private List<Expenses> expenses = new List<Expenses>();
+        private Dictionary<string, decimal> categoryBudgets = new Dictionary<string, decimal>();
 
         public List<Expenses> GetExpenses()
         {
@@ -40,29 +40,25 @@ namespace SimpleEM.Controllers
 
         public decimal GetCategoryBudget(string category)
         {
-            var expense = expenses.FirstOrDefault(e => e.GetCategory() == category);
-            return expense?.GetCategoryBudget(category) ?? 0;
+            return categoryBudgets.ContainsKey(category) ? categoryBudgets[category] : 0;
         }
 
         public void SetCategoryBudget(string category, decimal budget)
         {
-            var existingExpense = expenses.FirstOrDefault(expense => expense.GetCategory() == category);
-
-            if (existingExpense != null)
-            {
-                existingExpense.SetCategoryBudget(category, budget);
-            }
-            else
-            {
-                // Thêm danh mục mới vào danh sách ngân sách mà không thêm chi tiêu rác
-                var tempExpense = new Expenses();
-                tempExpense.SetCategory(category);
-                tempExpense.SetCategoryBudget(category, budget);
-                expenses.Add(tempExpense);
-            }
+            categoryBudgets[category] = budget;
         }
 
-
+        public void RemoveCategoryBudget(string category)
+        {
+            if (categoryBudgets.ContainsKey(category))
+            {
+                categoryBudgets.Remove(category);
+            }
+        }
+        public decimal GetTotalAmountByCategory(string category)
+        {
+            return expenses.Where(expense => expense.GetCategory() == category).Sum(expense => expense.GetAmount());
+        }
 
         public void SaveData(string filePath)
         {
@@ -75,11 +71,7 @@ namespace SimpleEM.Controllers
                     Date = exp.GetDate(),
                     Category = exp.GetCategory()
                 }).ToList(),
-                CategoryBudgets = expenses
-                    .SelectMany(exp => exp.GetType().GetField("categoryBudgets", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                    .GetValue(exp) as Dictionary<string, decimal>)
-                    .GroupBy(kvp => kvp.Key)
-                    .ToDictionary(group => group.Key, group => group.First().Value)
+                CategoryBudgets = categoryBudgets
             };
 
             string json = JsonConvert.SerializeObject(data, Formatting.Indented);
@@ -94,6 +86,7 @@ namespace SimpleEM.Controllers
                 var data = JsonConvert.DeserializeObject<dynamic>(json);
 
                 expenses.Clear();
+                categoryBudgets.Clear();
 
                 foreach (var exp in data.Expenses)
                 {
@@ -108,23 +101,17 @@ namespace SimpleEM.Controllers
                     }
                 }
 
-                var categoryBudgets = data.CategoryBudgets.ToObject<Dictionary<string, decimal>>();
-                foreach (var budget in categoryBudgets)
+                var budgets = data.CategoryBudgets.ToObject<Dictionary<string, decimal>>();
+                foreach (var budget in budgets)
                 {
-                    SetCategoryBudget(budget.Key, budget.Value);
+                    categoryBudgets[budget.Key] = budget.Value;
                 }
             }
         }
 
-
-
-
-        public void RemoveCategoryBudget(string category)
+        public Dictionary<string, decimal> GetCategoryBudgets()
         {
-            foreach (var expense in expenses)
-            {
-                expense.RemoveCategoryBudget(category);
-            }
+            return new Dictionary<string, decimal>(categoryBudgets);
         }
     }
 }

@@ -176,11 +176,7 @@ namespace SimpleEM.Views
         private void UpdateBudgetListView()
         {
             listViewBudgets.Items.Clear();
-            var categoryBudgets = expenseController.GetExpenses()
-                .SelectMany(e => e.GetType().GetField("categoryBudgets", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                .GetValue(e) as Dictionary<string, decimal>)
-                .GroupBy(kvp => kvp.Key)
-                .ToDictionary(group => group.Key, group => group.First().Value);
+            var categoryBudgets = expenseController.GetCategoryBudgets();
 
             foreach (var budget in categoryBudgets)
             {
@@ -204,19 +200,29 @@ namespace SimpleEM.Views
 
         private void CheckBudgetAlerts()
         {
-            foreach (var budget in expenseController.GetExpenses().SelectMany(e => e.GetType().GetField("categoryBudgets", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                        .GetValue(e) as Dictionary<string, decimal>)
-                        .Distinct())
+            foreach (var expense in expenseController.GetExpenses())
             {
-                decimal totalSpent = expenseController.GetExpenses().Where(e => e.GetCategory() == budget.Key).Sum(e => e.GetAmount());
-                decimal remainingBudget = budget.Value - totalSpent;
-                decimal remainingPercentage = (remainingBudget / budget.Value) * 100;
-                if (remainingPercentage <= 30)
+                decimal categoryBudget = expenseController.GetCategoryBudget(expense.GetCategory()); // Ngân sách
+                decimal totalCategoryExpenses = expenseController.GetTotalAmountByCategory(expense.GetCategory()); // Chi tiêu
+
+                // Kiểm tra để tránh chia cho 0
+                if (categoryBudget > 0)
                 {
-                    MessageBox.Show($"Cảnh báo: Bạn đã tiêu {totalSpent} VNĐ ({100 - remainingPercentage}% ngân sách) cho {budget.Key}!", "Cảnh báo", MessageBoxButtons.OK);
+                    decimal spentPercentage = (totalCategoryExpenses / categoryBudget) * 100;
+
+                    if (spentPercentage >= 70 && spentPercentage <= 100)
+                    {
+                        MessageBox.Show($"Bạn đã tiêu {spentPercentage:F2}% của danh mục '{expense.GetCategory()}', đã sắp vượt mức ngân sách!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    else if (spentPercentage > 100)
+                    {
+                        MessageBox.Show($"Chi tiêu của danh mục '{expense.GetCategory()}' đã vượt mức ngân sách!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
                 }
             }
         }
+
+
 
         private void BtnFilterExpenses_Click(object sender, EventArgs e)
         {
