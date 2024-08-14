@@ -11,6 +11,8 @@ namespace SimpleEM.Views
     public partial class FormView : Form
     {
         private ExpenseController expenseController;
+        private HashSet<string> alertedCategories = new HashSet<string>();
+
         private readonly List<string> predefinedCategories = new List<string>()
         {
             "Ăn uống", "Ở", "Đi lại", "Hóa đơn tiện ích", "Trả nợ",
@@ -200,29 +202,26 @@ namespace SimpleEM.Views
 
         private void CheckBudgetAlerts()
         {
-            foreach (var expense in expenseController.GetExpenses())
+            var categoryBudgets = expenseController.GetCategoryBudgets();
+
+            foreach (var category in categoryBudgets.Keys)
             {
-                decimal categoryBudget = expenseController.GetCategoryBudget(expense.GetCategory()); // Ngân sách
-                decimal totalCategoryExpenses = expenseController.GetTotalAmountByCategory(expense.GetCategory()); // Chi tiêu
+                decimal totalAmountInCategory = expenseController.GetTotalAmountByCategory(category);
+                decimal categoryBudget = expenseController.GetCategoryBudget(category);
 
-                // Kiểm tra để tránh chia cho 0
-                if (categoryBudget > 0)
+                // Kiểm tra xem ngân sách có bị vượt không và danh mục này chưa được cảnh báo
+                if (totalAmountInCategory > categoryBudget && !alertedCategories.Contains(category))
                 {
-                    decimal spentPercentage = (totalCategoryExpenses / categoryBudget) * 100;
-
-                    if (spentPercentage >= 70 && spentPercentage <= 100)
-                    {
-                        MessageBox.Show($"Bạn đã tiêu {spentPercentage:F2}% của danh mục '{expense.GetCategory()}', đã sắp vượt mức ngân sách!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
-                    else if (spentPercentage > 100)
-                    {
-                        MessageBox.Show($"Chi tiêu của danh mục '{expense.GetCategory()}' đã vượt mức ngân sách!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
+                    MessageBox.Show($"Cảnh báo: Bạn đã chi tiêu vượt quá ngân sách của danh mục '{category}'!", "Cảnh báo ngân sách", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    alertedCategories.Add(category); // Thêm danh mục vào danh sách đã cảnh báo
                 }
             }
         }
 
-
+        private void ResetAlertedCategories()
+        {
+            alertedCategories.Clear(); // Xóa danh mục đã cảnh báo
+        }
 
         private void BtnFilterExpenses_Click(object sender, EventArgs e)
         {
@@ -326,5 +325,44 @@ namespace SimpleEM.Views
             }
         }
 
+        private void listViewBudgets_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cmbCategory_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtAmount_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtDes_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtFilterCategory_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dtpFilterDate_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cmbTimePeriod_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtBudget_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

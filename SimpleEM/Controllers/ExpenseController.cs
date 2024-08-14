@@ -10,6 +10,7 @@ namespace SimpleEM.Controllers
     {
         private List<Expenses> expenses = new List<Expenses>();
         private Dictionary<string, decimal> categoryBudgets = new Dictionary<string, decimal>();
+        private HashSet<string> alertedCategories = new HashSet<string>(); // Tập hợp lưu trữ các danh mục đã cảnh báo
 
         public List<Expenses> GetExpenses()
         {
@@ -18,9 +19,22 @@ namespace SimpleEM.Controllers
 
         public void AddExpense(Expenses expense)
         {
+            // Thêm chi tiêu nếu không trùng lặp
             if (!expenses.Any(e => e.GetDescription() == expense.GetDescription() && e.GetAmount() == expense.GetAmount() && e.GetDate() == expense.GetDate() && e.GetCategory() == expense.GetCategory()))
             {
                 expenses.Add(expense);
+
+                // Kiểm tra ngân sách danh mục
+                string category = expense.GetCategory();
+                decimal totalAmountInCategory = GetTotalAmountByCategory(category);
+                decimal categoryBudget = GetCategoryBudget(category);
+
+                // Nếu tổng chi tiêu vượt ngân sách và chưa cảnh báo cho danh mục này
+                if (totalAmountInCategory > categoryBudget && !alertedCategories.Contains(category))
+                {
+                    Console.WriteLine($"Warning: You have exceeded the budget for category '{category}'!");
+                    alertedCategories.Add(category); // Thêm danh mục vào danh sách đã cảnh báo
+                }
             }
         }
 
@@ -30,6 +44,16 @@ namespace SimpleEM.Controllers
             if (existingExpense != null)
             {
                 expenses.Remove(existingExpense);
+
+                // Kiểm tra lại trạng thái cảnh báo cho danh mục sau khi xóa chi tiêu
+                string category = existingExpense.GetCategory();
+                decimal totalAmountInCategory = GetTotalAmountByCategory(category);
+                decimal categoryBudget = GetCategoryBudget(category);
+
+                if (totalAmountInCategory <= categoryBudget && alertedCategories.Contains(category))
+                {
+                    alertedCategories.Remove(category); // Reset cảnh báo nếu không còn vượt ngân sách
+                }
             }
         }
 
@@ -46,6 +70,11 @@ namespace SimpleEM.Controllers
         public void SetCategoryBudget(string category, decimal budget)
         {
             categoryBudgets[category] = budget;
+            // Reset cảnh báo khi cập nhật ngân sách
+            if (alertedCategories.Contains(category))
+            {
+                alertedCategories.Remove(category);
+            }
         }
 
         public void RemoveCategoryBudget(string category)
