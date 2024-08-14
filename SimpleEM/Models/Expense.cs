@@ -1,17 +1,52 @@
-﻿// Models/Expense.cs
+﻿// Models/Expenses.cs
+using System;
 using System.Collections.Generic;
 
 namespace SimpleEM.Models
 {
-    public class Expenses : ExpenseBase
+    public class Expenses
     {
-        private Dictionary<string, decimal> categoryBudgets = new Dictionary<string, decimal>();
+        // Thuộc tính chi tiêu
+        private string? description;
+        private decimal amount;
+        private DateTime date;
         private string? _category;
-        internal string? Description;
-        internal decimal Amount;
-        internal DateTime Date;
-        internal string? Category;
 
+        // Từ điển quản lý ngân sách theo danh mục
+        private Dictionary<string, decimal> categoryBudgets = new Dictionary<string, decimal>();
+
+        // Các phương thức getter và setter cho chi tiêu
+        public string? GetDescription()
+        {
+            return description;
+        }
+
+        public void SetDescription(string? value)
+        {
+            description = value;
+        }
+
+        public decimal GetAmount()
+        {
+            return amount;
+        }
+
+        public void SetAmount(decimal value)
+        {
+            amount = value;
+        }
+
+        public DateTime GetDate()
+        {
+            return date;
+        }
+
+        public void SetDate(DateTime value)
+        {
+            date = value;
+        }
+
+        // Phương thức cho danh mục
         public string GetCategory()
         {
             return _category;
@@ -22,12 +57,8 @@ namespace SimpleEM.Models
             _category = value;
         }
 
-        public override string ToString()
-        {
-            return $"{GetDescription()} ({GetCategory()}): {GetAmount()} VNĐ - {GetDate().ToShortDateString()}";
-        }
-
-        public override decimal GetCategoryBudget(string category)
+        // Phương thức quản lý ngân sách cho từng danh mục
+        public decimal GetCategoryBudget(string category)
         {
             if (categoryBudgets.TryGetValue(category, out decimal budget))
             {
@@ -36,7 +67,7 @@ namespace SimpleEM.Models
             return 0;
         }
 
-        public override void SetCategoryBudget(string category, decimal budget)
+        public void SetCategoryBudget(string category, decimal budget)
         {
             if (categoryBudgets.ContainsKey(category))
             {
@@ -47,6 +78,7 @@ namespace SimpleEM.Models
                 categoryBudgets.Add(category, budget);
             }
         }
+
         public void RemoveCategoryBudget(string category)
         {
             if (categoryBudgets.ContainsKey(category))
@@ -55,5 +87,10 @@ namespace SimpleEM.Models
             }
         }
 
+        // Phương thức để hiển thị chi tiêu dưới dạng chuỗi
+        public override string ToString()
+        {
+            return $"{GetDescription()} ({GetCategory()}): {GetAmount()} VNĐ - {GetDate().ToShortDateString()}";
+        }
     }
 }

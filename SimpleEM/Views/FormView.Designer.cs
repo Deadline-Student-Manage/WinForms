@@ -29,11 +29,16 @@ namespace SimpleEM.Views
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             btnAddExpenses = new Button();
+            toolTip = new ToolTip(components);
+            txtAmount = new TextBox();
+            cmbCategory = new ComboBox();
+            txtDes = new TextBox();
+            txtFilterCategory = new ComboBox();
+            txtBudget = new TextBox();
             btnFilterExpenses = new Button();
             listExpenses = new ListBox();
-            txtDes = new TextBox();
-            txtAmount = new TextBox();
             lblDes = new Label();
             lblAmount = new Label();
             lblTotal = new Label();
@@ -41,14 +46,11 @@ namespace SimpleEM.Views
             cmbTimePeriod = new ComboBox();
             dtpFilterDate = new DateTimePicker();
             lblCategory = new Label();
-            cmbCategory = new ComboBox();
             btnAddCategory = new Button();
             lblExpenseDate = new Label();
             dtpExpenseDate = new DateTimePicker();
             lblFilterCategory = new Label();
-            txtFilterCategory = new ComboBox();
             lblBudget = new Label();
-            txtBudget = new TextBox();
             btnSetCategoryBudget = new Button();
             lblTypeFilter = new Label();
             lblTitle = new Label();
@@ -69,8 +71,61 @@ namespace SimpleEM.Views
             btnAddExpenses.Size = new Size(131, 29);
             btnAddExpenses.TabIndex = 0;
             btnAddExpenses.Text = "Thêm chi tiêu";
+            toolTip.SetToolTip(btnAddExpenses, "Nhấn để thêm chi tiêu mới.");
             btnAddExpenses.UseVisualStyleBackColor = true;
             btnAddExpenses.Click += BtnAddExpenses_Click;
+            // 
+            // txtAmount
+            // 
+            txtAmount.Location = new Point(163, 79);
+            txtAmount.Margin = new Padding(2);
+            txtAmount.Name = "txtAmount";
+            txtAmount.Size = new Size(98, 23);
+            txtAmount.TabIndex = 4;
+            toolTip.SetToolTip(txtAmount, "Nhập số tiền chi tiêu.");
+            txtAmount.TextChanged += txtAmount_TextChanged;
+            // 
+            // cmbCategory
+            // 
+            cmbCategory.FormattingEnabled = true;
+            cmbCategory.Location = new Point(163, 177);
+            cmbCategory.Margin = new Padding(2);
+            cmbCategory.Name = "cmbCategory";
+            cmbCategory.Size = new Size(118, 23);
+            cmbCategory.TabIndex = 13;
+            toolTip.SetToolTip(cmbCategory, "Chọn danh mục cho chi tiêu này.");
+            cmbCategory.SelectedIndexChanged += cmbCategory_SelectedIndexChanged;
+            // 
+            // txtDes
+            //
+            txtDes.Location = new Point(163, 111);
+            txtDes.Margin = new Padding(2);
+            txtDes.Name = "txtDes";
+            txtDes.Size = new Size(283, 23);
+            txtDes.TabIndex = 3;
+            toolTip.SetToolTip(txtDes, "Nhập mô tả chi tiêu");
+            txtDes.TextChanged += txtDes_TextChanged;
+            // 
+            // txtFilterCategory
+            // 
+            txtFilterCategory.FormattingEnabled = true;
+            txtFilterCategory.Location = new Point(579, 75);
+            txtFilterCategory.Margin = new Padding(2);
+            txtFilterCategory.Name = "txtFilterCategory";
+            txtFilterCategory.Size = new Size(118, 23);
+            txtFilterCategory.TabIndex = 13;
+            toolTip.SetToolTip(txtFilterCategory, "Chọn danh mục để lọc");
+            txtFilterCategory.SelectedIndexChanged += txtFilterCategory_SelectedIndexChanged;
+            // 
+            // txtBudget
+            // 
+            txtBudget.Location = new Point(579, 175);
+            txtBudget.Margin = new Padding(2);
+            txtBudget.Name = "txtBudget";
+            txtBudget.Size = new Size(118, 23);
+            txtBudget.TabIndex = 4;
+            toolTip.SetToolTip(txtBudget, "Nhập ngân sách danh mục");
+            txtBudget.TextChanged += txtBudget_TextChanged;
             // 
             // btnFilterExpenses
             // 
@@ -89,27 +144,11 @@ namespace SimpleEM.Views
             listExpenses.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             listExpenses.FormattingEnabled = true;
             listExpenses.ItemHeight = 21;
-            listExpenses.Location = new Point(43, 293);
+            listExpenses.Location = new Point(26, 291);
             listExpenses.Margin = new Padding(2);
             listExpenses.Name = "listExpenses";
             listExpenses.Size = new Size(524, 193);
             listExpenses.TabIndex = 2;
-            // 
-            // txtDes
-            // 
-            txtDes.Location = new Point(163, 112);
-            txtDes.Margin = new Padding(2);
-            txtDes.Name = "txtDes";
-            txtDes.Size = new Size(283, 23);
-            txtDes.TabIndex = 3;
-            // 
-            // txtAmount
-            // 
-            txtAmount.Location = new Point(163, 75);
-            txtAmount.Margin = new Padding(2);
-            txtAmount.Name = "txtAmount";
-            txtAmount.Size = new Size(98, 23);
-            txtAmount.TabIndex = 4;
             // 
             // lblDes
             // 
@@ -165,6 +204,7 @@ namespace SimpleEM.Views
             cmbTimePeriod.Name = "cmbTimePeriod";
             cmbTimePeriod.Size = new Size(118, 23);
             cmbTimePeriod.TabIndex = 9;
+            cmbTimePeriod.SelectedIndexChanged += cmbTimePeriod_SelectedIndexChanged;
             // 
             // dtpFilterDate
             // 
@@ -173,6 +213,7 @@ namespace SimpleEM.Views
             dtpFilterDate.Name = "dtpFilterDate";
             dtpFilterDate.Size = new Size(206, 23);
             dtpFilterDate.TabIndex = 10;
+            dtpFilterDate.ValueChanged += dtpFilterDate_ValueChanged;
             // 
             // lblCategory
             // 
@@ -185,19 +226,10 @@ namespace SimpleEM.Views
             lblCategory.TabIndex = 12;
             lblCategory.Text = "Danh mục:";
             // 
-            // cmbCategory
-            // 
-            cmbCategory.FormattingEnabled = true;
-            cmbCategory.Location = new Point(163, 177);
-            cmbCategory.Margin = new Padding(2);
-            cmbCategory.Name = "cmbCategory";
-            cmbCategory.Size = new Size(118, 23);
-            cmbCategory.TabIndex = 13;
-            // 
             // btnAddCategory
             // 
             btnAddCategory.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnAddCategory.Location = new Point(304, 177);
+            btnAddCategory.Location = new Point(293, 177);
             btnAddCategory.Margin = new Padding(2);
             btnAddCategory.Name = "btnAddCategory";
             btnAddCategory.Size = new Size(146, 41);
@@ -236,15 +268,6 @@ namespace SimpleEM.Views
             lblFilterCategory.TabIndex = 12;
             lblFilterCategory.Text = "Danh mục:";
             // 
-            // txtFilterCategory
-            // 
-            txtFilterCategory.FormattingEnabled = true;
-            txtFilterCategory.Location = new Point(579, 75);
-            txtFilterCategory.Margin = new Padding(2);
-            txtFilterCategory.Name = "txtFilterCategory";
-            txtFilterCategory.Size = new Size(118, 23);
-            txtFilterCategory.TabIndex = 13;
-            // 
             // lblBudget
             // 
             lblBudget.AutoSize = true;
@@ -255,14 +278,6 @@ namespace SimpleEM.Views
             lblBudget.Size = new Size(94, 21);
             lblBudget.TabIndex = 12;
             lblBudget.Text = "Ngân sách:";
-            // 
-            // txtBudget
-            // 
-            txtBudget.Location = new Point(579, 175);
-            txtBudget.Margin = new Padding(2);
-            txtBudget.Name = "txtBudget";
-            txtBudget.Size = new Size(118, 23);
-            txtBudget.TabIndex = 4;
             // 
             // btnSetCategoryBudget
             // 
@@ -301,12 +316,13 @@ namespace SimpleEM.Views
             // 
             listViewBudgets.Columns.AddRange(new ColumnHeader[] { columnHeaderCategory, columnHeaderBudget });
             listViewBudgets.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            listViewBudgets.Location = new Point(572, 246);
+            listViewBudgets.Location = new Point(579, 244);
             listViewBudgets.Name = "listViewBudgets";
             listViewBudgets.Size = new Size(292, 240);
             listViewBudgets.TabIndex = 0;
             listViewBudgets.UseCompatibleStateImageBehavior = false;
             listViewBudgets.View = View.Details;
+            listViewBudgets.SelectedIndexChanged += listViewBudgets_SelectedIndexChanged;
             // 
             // columnHeaderCategory
             // 
@@ -351,6 +367,13 @@ namespace SimpleEM.Views
             btnDelCategoryBudget.Text = "Xóa ngân sách";
             btnDelCategoryBudget.UseVisualStyleBackColor = true;
             btnDelCategoryBudget.Click += BtnDelCategoryBudget_Click;
+            // 
+            // toolTip
+            // 
+            toolTip.AutoPopDelay = 5000;
+            toolTip.InitialDelay = 1000;
+            toolTip.ReshowDelay = 500;
+            toolTip.ShowAlways = true;
             // 
             // FormView
             // 
@@ -422,6 +445,7 @@ namespace SimpleEM.Views
         private System.Windows.Forms.ColumnHeader columnHeaderBudget;
         private System.Windows.Forms.Button btnDeleteExpense;
         private System.Windows.Forms.Button btnDeleteCategory;
+        private ToolTip toolTip;
         private Label lblTypeFilter;
         private Label lblTitle;
         private Button btnDelCategoryBudget;
